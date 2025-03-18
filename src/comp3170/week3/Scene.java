@@ -93,7 +93,7 @@ public class Scene {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0); //REMEMBER TRS when you get to this part
 
 	}
 
