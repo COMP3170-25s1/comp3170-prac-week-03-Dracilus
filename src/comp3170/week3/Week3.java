@@ -51,7 +51,7 @@ public class Week3 implements IWindowListener {
 	public void draw() {
 
         // clear the colour buffer
-		glClear(GL_COLOR_BUFFER_BIT);	//When you get to doing animation, remember we need to make our deltatime here
+		glClear(GL_COLOR_BUFFER_BIT);	//When you get to doing animation, remember we need to make our deltatime here. When setting scale, use math.pow
 		
 		scene.draw();
 	    
