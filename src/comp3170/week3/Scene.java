@@ -30,6 +30,8 @@ public class Scene {
 	private int colourBuffer;
 
 	private Shader shader;
+	
+	// Think about the model, transform matrix, rotation matrix and scale matrix being here
 
 	public Scene() {
 
@@ -116,6 +118,7 @@ public class Scene {
 
 		// Perform operations on only the x and y values of the T vec. 
 		// Leaves the z value alone, as we are only doing 2D transformations.
+		// When applying this in the vertex shader, remember matrix on the left of the point multiplication!
 		
 		dest.m30(tx);
 		dest.m31(ty);
@@ -134,7 +137,7 @@ public class Scene {
 
 	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {
 
-		// TODO: Your code here
+		// TODO: Your code here, check 36:51 of the lecture if you need help, me :) Also import comp3170.Math.*
 
 		return dest;
 	}
