@@ -22,6 +22,7 @@ public class Week3 implements IWindowListener {
 	private int width = 800;
 	private int height = 800;
 	private Scene scene;
+	private long oldTime;
 	
 	public Week3() throws OpenGLException  {
 		
@@ -44,17 +45,26 @@ public class Week3 implements IWindowListener {
 		// create the scene
 		scene = new Scene();
 		
+		oldTime = System.currentTimeMillis();
+		
 	}
 
 
 	@Override
 	public void draw() {
-
+		update();
         // clear the colour buffer
 		glClear(GL_COLOR_BUFFER_BIT);	//When you get to doing animation, remember we need to make our deltatime here. When setting scale, use math.pow
 		
 		scene.draw();
 	    
+	}
+	
+	public void update() {
+		long time = System.currentTimeMillis();
+		float deltaTime = (time - oldTime) / 1000f;
+		oldTime = time;
+		scene.update(deltaTime);
 	}
 
 	@Override

@@ -10,12 +10,14 @@ import static org.lwjgl.opengl.GL11.glPolygonMode;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import comp3170.GLBuffers;
 import comp3170.Shader;
 import comp3170.ShaderLibrary;
+import static comp3170.Math.TAU;
 
 public class Scene {
 
@@ -30,6 +32,16 @@ public class Scene {
 	private int colourBuffer;
 
 	private Shader shader;
+	
+	private Matrix4f modelMatrix = new Matrix4f();
+	private Matrix4f transMatrix = new Matrix4f();
+	private Matrix4f rotMatrix = new Matrix4f();
+	private Matrix4f scalMatrix = new Matrix4f();
+	
+	final private Vector3f OFFSET = new Vector3f(0.0f, 0.25f, 0.0f);
+	final private float MOVEMENT_SPEED = 5.0f;
+	final private float ROTATION_RATE = 3;
+	final private Vector3f SCALE = new Vector3f(0.1f, 0.1f, 0.0f);
 	
 	// Think about the model, transform matrix, rotation matrix and scale matrix being here
 
@@ -79,7 +91,25 @@ public class Scene {
 			// @formatter:on
 
 		indexBuffer = GLBuffers.createIndexBuffer(indices);
-
+		
+		//Vector3f offset = new Vector3f(0f, 0.25f, 0.0f);
+		//float rotation = (float) Math.toRadians(90);
+		//Vector3f scale = new Vector3f(0.1f, 0.1f, 0.0f);
+		
+		//holding on to my methods so it can be marked!
+		//translationMatrix(offset.x, offset.y, transMatrix);
+		//rotationMatrix(rotation, rotMatrix);
+		//scaleMatrix(scale.x, scale.y, scalMatrix);
+		
+		modelMatrix.translate(OFFSET).scale(SCALE); // T R S!!!
+		
+		//modelMatrix.mul(transMatrix).mul(rotMatrix).mul(scalMatrix);
+	}
+	
+	public void update(float deltaTime) {
+		float movement = MOVEMENT_SPEED * deltaTime;
+		float rotation = ROTATION_RATE * deltaTime;
+		modelMatrix.translate(0.0f, movement, 0.0f).rotateZ(rotation);
 	}
 
 	public void draw() {
@@ -87,6 +117,7 @@ public class Scene {
 		shader.enable();
 		// set the attributes
 		shader.setAttribute("a_position", vertexBuffer);
+		shader.setUniform("u_modelMatrix", modelMatrix);
 		shader.setAttribute("a_colour", colourBuffer);
 
 		// draw using index buffer
@@ -94,6 +125,7 @@ public class Scene {
 		
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0); //REMEMBER TRS when you get to this part
+		
 
 	}
 
@@ -137,7 +169,17 @@ public class Scene {
 
 	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {
 
-		// TODO: Your code here, check 36:51 of the lecture if you need help, me :) Also import comp3170.Math.*
+		// TODO: Your code here, check 36:51 of the lecture if you need help, me :) Also import comp3170.Math.* if it fails
+		
+		//			[ cos(a) -sin(a) 0 0 ]
+		// Rot(a)=  [ sin(a)  cos(a) 0 0 ]
+		//			[	  0		  0  0 0 ]
+		// 			[ 	  0		  0  0 1 ]
+		
+		dest.m00((float) Math.cos(angle));
+		dest.m01((float) Math.sin(angle));
+		dest.m10((float) Math.sin(-angle));
+		dest.m11((float) Math.cos(angle));
 
 		return dest;
 	}
@@ -155,6 +197,13 @@ public class Scene {
 	public static Matrix4f scaleMatrix(float sx, float sy, Matrix4f dest) {
 
 		// TODO: Your code here
+		//		[ sx 0 0 0 ]
+		// S =  [ 0 sy 0 0 ]
+		// 		[ 0  0 0 0 ]
+		//		[ 0  0 0 1 ]
+		
+		dest.m00(sx);
+		dest.m11(sy);
 
 		return dest;
 	}
